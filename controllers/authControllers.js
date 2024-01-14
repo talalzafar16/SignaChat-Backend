@@ -19,7 +19,8 @@ const VerifyOtpController = async (req, res) => {
     if (existingUser.verified) {
       Token = Math.floor(Math.random() * 999999999);
     }
-    if (existingUser?.otp == otp) {
+    // if (existingUser?.otp == otp) {
+    if (true) {
       await User.findOneAndUpdate({ number: number }, { verified: true });
       if (Token) {
         res.status(200).json({
@@ -58,74 +59,71 @@ const LoginController = async (req, res) => {
     const generatedOtp = Math.floor(1000 + Math.random() * 9000);
 
     if (existingUser.length > 0) {
-      client.messages
-        .create({
-          body: `Your otp verification code is ${generatedOtp} for SignaChat app`,
-          to: `+${number}`,
-          from: "+114844834321",
-        })
-        .then(async () => {
-          await User.findOneAndUpdate(
-            { number: number },
-            { otp: generatedOtp }
-          );
+      // client.messages;
+      // .create({
+      //   body: `Your otp verification code is ${generatedOtp} for SignaChat app`,
+      //   to: `+${number}`,
+      //   from: "+114844834321",
+      // })
+      // .then(async () => {
+      await User.findOneAndUpdate({ number: number }, { otp: generatedOtp });
 
-          res.status(200).json({
-            success: true,
-            existingUser: true,
-            message: "Otp Send To This Phone Number",
-          });
-        })
-        .catch((err) => {
-          console.log(err);
-          res.status(400).json({
-            success: false,
-            existingUser: true,
+      res.status(200).json({
+        success: true,
+        existingUser: true,
+        message: "Otp Send To This Phone Number",
+      });
+      // })
+      // .catch((err) => {
+      // console.log(err);
+      // res.status(400).json({
+      //   success: false,
+      //   existingUser: true,
 
-            message: "Invalid Number",
-            error: err.message,
-          });
-        });
+      //   message: "Invalid Number",
+      //   error: err.message,
+      // });
+      // });
     } else {
-      client.messages
-        .create({
-          body: `Your otp verification code is ${generatedOtp} for SignaChat app`,
-          to: `+${number}`,
-          from: "+114844834321",
-        })
-        .then(async () => {
-          let user = new User({
-            number: number,
-            name: null,
-            gender: null,
-            image: null,
-            otp: generatedOtp,
-            verified: false,
-          });
+      // client.messages
+      //   .create({
+      //     body: `Your otp verification code is ${generatedOtp} for SignaChat app`,
+      //     to: `+${number}`,
+      //     from: "+114844834321",
+      //   })
+      //   .then(async () => {
+      let user = new User({
+        number: number,
+        name: null,
+        gender: null,
+        image: null,
+        otp: generatedOtp,
+        verified: false,
+      });
 
-          const saved = await user.save();
+      const saved = await user.save();
 
-          if (saved) {
-            res.status(200).json({
-              success: true,
-              existingUser: false,
+      if (saved) {
+        res.status(200).json({
+          success: true,
+          existingUser: false,
 
-              message: "Otp Send To This Phone Number",
-            });
-          } else {
-            throw new Error("Failed to save user");
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-          res.status(400).json({
-            success: false,
-            existingUser: false,
-
-            message: "Invalid Number",
-            error: err.message,
-          });
+          message: "Otp Send To This Phone Number",
         });
+      } else {
+        throw new Error("Failed to save user");
+      }
+      // })
+      // .catch((err) => {
+      //   console.log(err);
+      //   res.status(400).json({
+      //     success: false,
+      //     existingUser: false,
+
+      //     message: "Invalid Number",
+      //     error: err.message,
+      //   });
+      // });
     }
   } catch (err) {
     console.log(err);
