@@ -9,7 +9,7 @@ const PORT = process.env.PORT || 8000;
 const app = express();
 app.use(cors({ origin: "*" }));
 app.use(morgan("dev"));
-app.use(express.json());
+app.use(express.json({ limit: "10mb" }));
 
 // Router
 app.use("/api/v1", router);
