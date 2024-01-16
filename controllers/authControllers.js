@@ -22,8 +22,8 @@ const VerifyOtpController = async (req, res) => {
     if (existingUser.verified) {
       Token = Math.floor(Math.random() * 999999999);
     }
-    // if (existingUser?.otp == otp) {
-    if (true) {
+    if (existingUser?.otp == otp) {
+      // if (true) {
       await User.findOneAndUpdate({ number: number }, { verified: true });
       if (Token) {
         res.status(200).json({
