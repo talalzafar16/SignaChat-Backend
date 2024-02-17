@@ -12,6 +12,7 @@ const { getAllUsers } = require("../controllers/userControllers");
 const {
   sendMessage,
   reciveMessage,
+  loadMessage,
 } = require("../controllers/messageControllers");
 const router = express.Router();
 
@@ -24,5 +25,5 @@ router.post("/user/create-user-contact", createContact);
 router.post("/user/get-all-users", getAllUsers);
 router.post("/user/send-message", sendMessage);
 router.post("/user/recieve-message", reciveMessage);
-
+router.post("/load-model", loadMessage);
 module.exports = router;

@@ -1,5 +1,5 @@
-const accountSid = "ACac6e66084deec60d4e193aef19901357";
-const authToken = "5271ff05e5c22abce0e8598f81a67e50";
+const accountSid = "ACd6f8812a316c43ed5d0e8871996b2315";
+const authToken = "ae307a4d17bb50c94a2db136378285fe";
 const fs = require("fs");
 const client = require("twilio")(accountSid, authToken);
 const User = require("../models/user.model");
@@ -22,8 +22,8 @@ const VerifyOtpController = async (req, res) => {
     if (existingUser.verified) {
       Token = Math.floor(Math.random() * 999999999);
     }
-    // if (existingUser?.otp == otp) {
-    if (true) {
+    if (existingUser?.otp == otp) {
+      // if (true) {
       await User.findOneAndUpdate({ number: number }, { verified: true });
       if (Token) {
         res.status(200).json({
@@ -61,89 +61,75 @@ const LoginController = async (req, res) => {
     let existingUser = await User.find({ number: number });
     const generatedOtp = Math.floor(1000 + Math.random() * 9000);
 
-    // if (existingUser.length > 0) {
-    // await vonage.sms
-    //   .send({
-    //     to: number,
-    //     from: "Vonage APIs",
-    //     text: `Your otp verification code is ${generatedOtp} for SignaChat app`,
-    //   })
-    //   // .then((resp) => {
-    //   //   console.log("Message sent successfully");
-    //   //   console.log(resp);
-    //   // })
-    //   // .catch((err) => {
-    //   //   console.log("There was an error sending the messages.");
-    //   //   console.error(err);
-    //   // });
-    // client.messages
-    //   .create({
-    //     body: `Your otp verification code is ${generatedOtp} for SignaChat app`,
-    //     to: `+923242639048`,
-    //     from: "+12062022839",
-    //   })
-    //   .then(async () => {
-    //     await User.findOneAndUpdate(
-    //       { number: number },
-    //       { otp: generatedOtp }
-    //     );
-    res.status(200).json({
-      success: true,
-      existingUser: true,
-      message: "Otp Send To This Phone Number",
-    });
-    // })
-    // .catch((err) => {
-    //   console.log(err);
-    //   res.status(400).json({
-    //     success: false,
-    //     existingUser: true,
+    if (existingUser.length > 0) {
+      client.messages
+        .create({
+          body: `Your otp verification code is ${generatedOtp} for SignaChat app`,
+          to: `+923352411400`,
+          from: "+14144557735",
+        })
+        .then(async () => {
+          await User.findOneAndUpdate(
+            { number: number },
+            { otp: generatedOtp }
+          );
+          res.status(200).json({
+            success: true,
+            existingUser: true,
+            message: "Otp Send To This Phone Number",
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+          res.status(400).json({
+            success: false,
+            existingUser: true,
 
-    //     message: "Invalid Number",
-    //     error: err.message,
-    //   });
-    // });
-    // } else {
-    //   client.messages
-    //     .create({
-    //       body: `Your otp verification code is ${generatedOtp} for SignaChat app`,
-    //       to: `+923242639048`,
-    //       from: "+12062022839",
-    //     })
-    //     .then(async () => {
-    //       let user = new User({
-    //         number: number,
-    //         name: null,
-    //         gender: null,
-    //         image: null,
-    //         otp: generatedOtp,
-    //         verified: false,
-    //       });
+            message: "Invalid Number",
+            error: err.message,
+          });
+        });
+    } else {
+      client.messages
+        .create({
+          body: `Your otp verification code is ${generatedOtp} for SignaChat app`,
+          to: `+923352411400`,
+          from: "+14144557735",
+        })
+        .then(async () => {
+          let user = new User({
+            number: number,
+            name: null,
+            gender: null,
+            image: null,
+            otp: generatedOtp,
+            verified: false,
+          });
 
-    //       const saved = await user.save();
+          const saved = await user.save();
 
-    //       if (saved) {
-    //         res.status(200).json({
-    //           success: true,
-    //           existingUser: false,
+          if (saved) {
+            res.status(200).json({
+              success: true,
+              existingUser: false,
 
-    //           message: "Otp Send To This Phone Number",
-    //         });
-    //       } else {
-    //         throw new Error("Failed to save user");
-    //       }
-    //     })
-    //     .catch((err) => {
-    //       console.log(err);
-    //       res.status(400).json({
-    //         success: false,
-    //         existingUser: false,
+              message: "Otp Send To This Phone Number",
+            });
+          } else {
+            throw new Error("Failed to save user");
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+          res.status(400).json({
+            success: false,
+            existingUser: false,
 
-    //         message: "Invalid Number",
-    //         error: err.message,
-    //       });
-    //     });
-    // }
+            message: "Invalid Number",
+            error: err.message,
+          });
+        });
+    }
   } catch (err) {
     console.log(err);
     res.status(400).json({
@@ -176,15 +162,15 @@ const RegitserController = async (req, res) => {
     // const base64 = await FileSystem.readAsStringAsync(image, {
     //   encoding: "base64",
     // });
-    // let user = await User.findOneAndUpdate(
-    //   { number: number },
-    //   {
-    //     name: name,
-    //     image: image,
-    //     gender: gender,
-    //   },
-    //   { new: true }
-    // );
+    let user = await User.findOneAndUpdate(
+      { number: number },
+      {
+        name: name,
+        image: image,
+        gender: gender,
+      },
+      { new: true }
+    );
     res.status(200).json({
       success: true,
       user: user,

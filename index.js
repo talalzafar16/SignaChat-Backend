@@ -2,22 +2,19 @@ require("dotenv").config();
 const express = require("express");
 require("./config/db");
 const cors = require("cors");
+
 const morgan = require("morgan");
 const router = require("./routes/routes");
+
 const PORT = process.env.PORT || 8000;
 
 const app = express();
 app.use(cors({ origin: "*" }));
 app.use(morgan("dev"));
-app.use(express.json({ limit: "10mb" }));
+app.use(express.json({ limit: "60mb" }));
 
 // Router
 app.use("/api/v1", router);
-
-// Test Api
-app.get("/", (req, res) => {
-  res.send("Server is running successfully");
-});
 
 const server = app.listen(PORT, () => {
   console.log(`Server Running on http://localhost:${PORT}`);
